@@ -76,22 +76,16 @@ export class Application {
         return this;
     }
 
-    njk() {
+    njk(viewPath: string, viewOption: {
+        extname: string,
+
+        noCache: boolean,
+        throwOnUndefined: boolean,
+        filters: any,
+        globals: any
+    }) {
         //路由
-        this.app.use(njk(path.resolve(__dirname, '../../view'), {
-            extname: '.html',
-            noCache: process.env.NODE_ENV !== 'production',
-            throwOnUndefined: true,
-            filters: {
-                json: function (str) {
-                    return JSON.stringify(str, null, 2);
-                },
-                upperCase: str => str.toUpperCase(),
-            },
-            globals: {
-                version: 'v3.0.0',
-            },
-        }));
+        this.app.use(njk(viewPath, viewOption));
         return this;
     }
 

@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const koa = require("koa");
 const staticServer = require("koa-static");
-const path = require("path");
 const Router = require("koa-router");
 const fs = require("fs");
 const index_1 = require("./nunjucks/index");
@@ -66,22 +65,9 @@ class Application {
         // Templating - Must be used before any router
         return this;
     }
-    njk() {
+    njk(viewPath, viewOption) {
         //路由
-        this.app.use(index_1.njk(path.resolve(__dirname, '../view'), {
-            extname: '.html',
-            noCache: process.env.NODE_ENV !== 'production',
-            throwOnUndefined: true,
-            filters: {
-                json: function (str) {
-                    return JSON.stringify(str, null, 2);
-                },
-                upperCase: str => str.toUpperCase(),
-            },
-            globals: {
-                version: 'v3.0.0',
-            },
-        }));
+        this.app.use(index_1.njk(viewPath, viewOption));
         return this;
     }
 }

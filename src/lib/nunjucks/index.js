@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /*   USAGE:
 
 import njk from './nunjucks';
@@ -20,7 +21,6 @@ app.use(njk(path.join(__dirname, 'views'), {
 }));
 
 */
-Object.defineProperty(exports, "__esModule", { value: true });
 // Inspired by:
 // https://github.com/ohomer/koa-nunjucks-render/blob/master/index.js
 // https://github.com/beliefgp/koa-nunjucks-next/blob/master/index.js
@@ -54,6 +54,7 @@ function njk(path, opts) {
                     if (err) {
                         return reject(err);
                     }
+                    ctx.set('Content-Type', 'text/html; charset=utf-8');
                     ctx.body = res;
                     return resolve();
                 });

@@ -1,3 +1,4 @@
+import koa = require('koa');
 /*   USAGE:
 
 import njk from './nunjucks';
@@ -46,6 +47,7 @@ export function njk(path: string, opts) {
     const globals = opts.globals || {};
     const g = Object.keys(globals).length;
     let j = 0;
+
     while (j < g) {
         env.addFilter(Object.keys(globals)[j], Object.values(globals)[j]);
         j += 1;
@@ -59,6 +61,7 @@ export function njk(path: string, opts) {
                     if (err) {
                         return reject(err);
                     }
+                    ctx.set('Content-Type', 'text/html; charset=utf-8')
                     ctx.body = res;
                     return resolve();
                 });
