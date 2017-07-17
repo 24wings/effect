@@ -1,30 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const yet = require("./lib");
-// freely flowing 行云流水
+const Promise = require("bluebird");
+global.Promise = Promise;
+const service = require("./service");
+const middle = require("./middle");
+const session = require("koa-session");
+const koa = require("koa");
 const path = require("path");
-var app = new yet.Application()
-    .staticDirs([path.resolve(__dirname, '../public')])
-    .loadRoute(__dirname + '/route')
-    .njk(path.resolve(__dirname, '../view'), {
-    extname: '.html',
-    noCache: process.env.NODE_ENV !== 'production',
-    throwOnUndefined: true,
-    filters: {
-        json: function (str) {
-            return JSON.stringify(str, null, 2);
-        },
-        upperCase: str => str.toUpperCase(),
-    },
-    globals: {
-        version: 'v3.0.0',
-    },
-})
-    .do([
-    { method: 'use', path: '/', middlewares: ['common.log'] },
-    { method: 'get', path: '/', middlewares: ['home.index'] },
-    { method: 'get', path: '/user', middlewares: ['common.checkUserLogin', 'user.home'] }
-])
-    .start({
-    port: 4000,
+const staticServer = require("koa-static");
+const Router = require("koa-router");
+// 应用的路由
+var router = new Router();
+router.get('/', middle.controller.home.index);
+// freely flowing 行云流水
+var app = new koa();
+app.use(staticServer(path.resolve(__dirname, '../public')))
+    .use(session(app))
+    .use(middle.common.base.bodyparser())
+    .use(middle.common.base.njk)
+    .use(router.routes())
+    .use(router.allowedMethods())
+    .listen(service.CONFIG.port, () => {
+    console.log(`server is running on   ${service.CONFIG.port}`);
 });

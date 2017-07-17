@@ -7,10 +7,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var action = {
+module.exports = {
     index: (ctx, next) => __awaiter(this, void 0, void 0, function* () {
-        yield ctx.redirect('/user');
+        yield ctx.render('user/index', {
+            title: 'title',
+            name: 'Jay'
+        });
     })
 };
-module.exports = action;
